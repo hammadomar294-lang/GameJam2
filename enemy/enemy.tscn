@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://enemy/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://enemy/health_bar.gd" id="2_hbar"]
+[ext_resource type="Texture2D" uid="uid://mqhabn6lmx4l" path="res://icon.svg" id="3_icon"]
+[ext_resource type="Resource" path="res://resources/bullets/enemy_bullet.tres" id="4_ebstats"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_enemy"]
+radius = 45.0
+
+[node name="Enemy" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_enemy")
+bullet_stats = ExtResource("4_ebstats")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("3_icon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_enemy")
+
+[node name="HealthBar" type="Node2D" parent="."]
+position = Vector2(0, -70)
+script = ExtResource("2_hbar")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

@@ -1,18 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://b3cn8knqaxxlg"]
+[gd_scene format=3 uid="uid://b3cn8knqaxxlg"]
 
 [ext_resource type="Script" uid="uid://dbqlfaoisc2vj" path="res://player/player.gd" id="1_mwbt6"]
 [ext_resource type="Texture2D" uid="uid://mqhabn6lmx4l" path="res://icon.svg" id="2_uom7t"]
 [ext_resource type="Script" uid="uid://bqcusb3q7wq24" path="res://components/movement_component.gd" id="3_w8ykr"]
 [ext_resource type="Script" uid="uid://bwrox8ig223di" path="res://components/input_component.gd" id="4_m2cbd"]
 [ext_resource type="Resource" path="res://resources/bullets/basic_bullet.tres" id="5_3r5av"]
-[ext_resource type="Script" path="res://components/attack_component.gd" id="6_yf24u"]
+[ext_resource type="Script" uid="uid://dsdkob0i0e1so" path="res://components/attack_component.gd" id="6_yf24u"]
+[ext_resource type="Script" uid="uid://cvqwgrv12vm4n" path="res://enemy/health_bar.gd" id="7_hbar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwbt6"]
 size = Vector2(32, 30)
 
 [node name="Player" type="CharacterBody2D" unique_id=1610053782]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_mwbt6")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1997200621]
@@ -21,6 +21,10 @@ texture = ExtResource("2_uom7t")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=108237443]
 shape = SubResource("RectangleShape2D_mwbt6")
+
+[node name="HealthBar" type="Node2D" parent="." unique_id=1468881532]
+position = Vector2(0, -26)
+script = ExtResource("7_hbar")
 
 [node name="Components" type="Node" parent="." unique_id=514422356]
 
@@ -33,7 +37,7 @@ entity = NodePath("../..")
 unique_name_in_owner = true
 script = ExtResource("4_m2cbd")
 
-[node name="AttackComponent" type="Node" parent="Components" node_paths=PackedStringArray("entity")]
+[node name="AttackComponent" type="Node" parent="Components" unique_id=189966644 node_paths=PackedStringArray("entity")]
 unique_name_in_owner = true
 script = ExtResource("6_yf24u")
 bullet_stats = ExtResource("5_3r5av")
