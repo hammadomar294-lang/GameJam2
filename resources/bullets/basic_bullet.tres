@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BulletStats" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/bullets/bullet_stats.gd" id="1_wm42c"]
+[ext_resource type="PackedScene" path="res://bullets/bullet.tscn" id="2_m5y2h"]
+
+[resource]
+script = ExtResource("1_wm42c")
+bullet_scene = ExtResource("2_m5y2h")
+speed = 600.0
+damage = 1.0
+lifetime = 1.5
+instantiated_bullets_count = 1
+spread_angle_degrees = 0.0
+spawn_distance = 34.0
+shoot_cooldown = 0.15

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bnaqaed0070hc"]
+
+[ext_resource type="Script" uid="uid://dxs400sepbv76" path="res://main/main_scene.gd" id="1_xq0vj"]
+[ext_resource type="PackedScene" uid="uid://b3cn8knqaxxlg" path="res://player/player.tscn" id="2_xd2es"]
+
+[node name="MainScene" type="Node2D" unique_id=1871214803]
+script = ExtResource("1_xq0vj")
+
+[node name="Player" parent="." unique_id=1882650137 instance=ExtResource("2_xd2es")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1429351044]
+zoom = Vector2(1.4, 1.4)
