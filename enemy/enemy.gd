@@ -79,7 +79,7 @@ func _on_area_entered(area: Area2D) -> void:
 		damage = float(area.stats.damage)
 
 	take_damage(damage)
-
+	HitStopManager.medium_hit_stop()
 
 func take_damage(amount: float) -> void:
 	health = maxf(health - amount, 0.0)
@@ -91,7 +91,7 @@ func take_damage(amount: float) -> void:
 	if health <= 0.0:
 		get_tree().quit()  # enemy killed -> close the game immediately
 		queue_free()
-
+   
 
 func _enter_phase2() -> void:
 	_phase2 = true

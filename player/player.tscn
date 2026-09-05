@@ -7,6 +7,7 @@
 [ext_resource type="Resource" path="res://resources/bullets/basic_bullet.tres" id="5_3r5av"]
 [ext_resource type="Script" uid="uid://dsdkob0i0e1so" path="res://components/attack_component.gd" id="6_yf24u"]
 [ext_resource type="Script" uid="uid://cvqwgrv12vm4n" path="res://enemy/health_bar.gd" id="7_hbar"]
+[ext_resource type="Script" uid="uid://bp5mwvj5fy0vy" path="res://components/input/PlayerCombatInputComponent.gd" id="8_combat"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mwbt6"]
 size = Vector2(32, 30)
@@ -42,3 +43,7 @@ unique_name_in_owner = true
 script = ExtResource("6_yf24u")
 bullet_stats = ExtResource("5_3r5av")
 entity = NodePath("../..")
+
+[node name="PlayerCombatInputComponent" type="Node" parent="Components" unique_id=1627738039]
+unique_name_in_owner = true
+script = ExtResource("8_combat")

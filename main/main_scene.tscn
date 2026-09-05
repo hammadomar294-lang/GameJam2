@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dxs400sepbv76" path="res://main/main_scene.gd" id="1_xq0vj"]
 [ext_resource type="PackedScene" uid="uid://b3cn8knqaxxlg" path="res://player/player.tscn" id="2_xd2es"]
 [ext_resource type="PackedScene" path="res://enemy/enemy.tscn" id="3_enemy"]
+[ext_resource type="Script" path="res://scenes/main/scripts/DynamicPlayerCamera2D.gd" id="4_cam"]
 
 [node name="MainScene" type="Node2D" unique_id=1871214803]
 script = ExtResource("1_xq0vj")
@@ -11,5 +12,7 @@ script = ExtResource("1_xq0vj")
 
 [node name="Enemy" parent="." unique_id=1634763836 instance=ExtResource("3_enemy")]
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1429351044]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1429351044 node_paths=PackedStringArray("target")]
 zoom = Vector2(1.4, 1.4)
+script = ExtResource("4_cam")
+target = NodePath("../Player")
