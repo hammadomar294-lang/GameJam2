@@ -1,28 +1,52 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://enemy/enemy.gd" id="1_enemy"]
 [ext_resource type="Script" path="res://enemy/health_bar.gd" id="2_hbar"]
-[ext_resource type="Texture2D" uid="uid://mqhabn6lmx4l" path="res://icon.svg" id="3_icon"]
+[ext_resource type="SpriteFrames" path="res://player/slime_sprite_frames.tres" id="3_slime"]
 [ext_resource type="Resource" path="res://resources/bullets/enemy_bullet.tres" id="4_ebstats"]
+[ext_resource type="Script" path="res://enemy/red_enemy_combat_controller.gd" id="5_rcc"]
+[ext_resource type="PackedScene" path="res://enemy/red_bomb.tscn" id="6_rbomb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_enemy"]
 radius = 45.0
 
 [node name="Enemy" type="Area2D"]
+position = Vector2(0, 0)
+scale = Vector2(2, 2)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_enemy")
 bullet_stats = ExtResource("4_ebstats")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.75, 0.75)
-texture = ExtResource("3_icon")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 0)
+offset = Vector2(-60.5, -27.5)
+centered = false
+sprite_frames = ExtResource("3_slime")
+animation = &"blue idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_enemy")
 
 [node name="HealthBar" type="Node2D" parent="."]
-position = Vector2(0, -70)
+position = Vector2(0, -24)
+scale = Vector2(0.5, 0.5)
 script = ExtResource("2_hbar")
+width = 100.0
+height = 10.0
+
+[node name="RedEnemyCombatController" type="Node" parent="."]
+script = ExtResource("5_rcc")
+bomb_scene = ExtResource("6_rbomb")
+
+[node name="BombTimer" type="Timer" parent="RedEnemyCombatController"]
+wait_time = 10.0
+autostart = true
+
+[node name="ShootTimer" type="Timer" parent="RedEnemyCombatController"]
+wait_time = 0.4
+autostart = true
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="RedEnemyCombatController/BombTimer" to="RedEnemyCombatController" method="_on_bomb_timer_timeout"]
+[connection signal="timeout" from="RedEnemyCombatController/ShootTimer" to="RedEnemyCombatController" method="_on_shoot_timer_timeout"]

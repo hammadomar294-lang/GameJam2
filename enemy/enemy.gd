@@ -1,46 +1,56 @@
 class_name Enemy
 extends Area2D
+## ============================================================
+## العدو (سلّايم) في نظام المدارات
+## ------------------------------------------------------------
+## - يبقى مثبّتاً في مركز الشاشة (locked_to_center).
+## - يطلق رصاصات باتجاه اللاعب، وفي المرحلة 2 (تحت 50 صحة) يطلق
+##   رشقة من 3 رصاصات وينفجر لونه إلى الأحمر (psd).
+## - يرمي قنابل حمراء عبر RedEnemyCombatController على الحلقات.
+## - يظهر شريط الحياة فوقه.
+## ============================================================
 
 @export var max_health: float = 100.0
 @export var bullet_stats: Resource
-@export var fire_interval: float = 0.5
 @export var bullet_spawn_distance: float = 60.0
 @export var phase2_hp_threshold: float = 50.0
 @export var phase2_spread_degrees: float = 30.0
+# The enemy stays pinned at the world origin (teleportation applies to the
+# bomb, not the enemy).
+@export var locked_to_center: bool = true
 
 var health: float = 0.0
-var _fire_timer: float = 0.0
 var _phase2: bool = false
 
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_bar: HealthBar = $HealthBar
+@onready var hit_stop_manager: Node = get_node_or_null("/root/HitStopManager")
 
 
 func _ready() -> void:
 	add_to_group("enemies")
 
 	collision_layer = 0
-	set_collision_layer_value(6, true)
+	set_collision_layer_value(6, true)   # enemy_hurtbox
 	collision_mask = 0
-	set_collision_mask_value(4, true)  # bullets
-	set_collision_mask_value(2, true)  # player
+	set_collision_mask_value(4, true)   # bullets
+	set_collision_mask_value(2, true)   # player
 
 	health = max_health
 	health_bar.set_ratio(1.0)
 
-	_fire_timer = fire_interval
+	animated_sprite.play("blue idle")
 
 
-func _physics_process(delta: float) -> void:
-	# The enemy stays fixed at the center of the screen.
-	global_position = Vector2.ZERO
-
-	_fire_timer -= delta
-	if _fire_timer <= 0.0:
-		_shoot()
-		_fire_timer = fire_interval
+func _physics_process(_delta: float) -> void:
+	# The enemy stays fixed at the center of the screen (locked to center).
+	if locked_to_center:
+		global_position = Vector2.ZERO
 
 
-func _shoot() -> void:
+## Public entry point for the standard bullet weapon. Called by the
+## RedEnemyCombatController's ShootTimer at the accelerated fire rate.
+func fire_bullets() -> void:
 	if bullet_stats == null or bullet_stats.bullet_scene == null:
 		return
 
@@ -57,7 +67,11 @@ func _shoot() -> void:
 	for index in range(bullet_count):
 		var bullet_direction := _get_bullet_direction(direction, index, bullet_count, spread_angle)
 		var bullet: Area2D = bullet_stats.bullet_scene.instantiate()
-		get_tree().current_scene.add_child(bullet)
+		var scene_root: Node = get_tree().current_scene
+		if scene_root == null:
+			bullet.queue_free()
+			return
+		scene_root.add_child(bullet)
 		bullet.global_position = global_position + bullet_direction * bullet_spawn_distance
 		bullet.setup(bullet_stats, bullet_direction)
 
@@ -79,7 +93,9 @@ func _on_area_entered(area: Area2D) -> void:
 		damage = float(area.stats.damage)
 
 	take_damage(damage)
-	HitStopManager.medium_hit_stop()
+	if hit_stop_manager != null:
+		hit_stop_manager.medium_hit_stop()
+
 
 func take_damage(amount: float) -> void:
 	health = maxf(health - amount, 0.0)
@@ -91,9 +107,9 @@ func take_damage(amount: float) -> void:
 	if health <= 0.0:
 		get_tree().quit()  # enemy killed -> close the game immediately
 		queue_free()
-   
+
 
 func _enter_phase2() -> void:
 	_phase2 = true
-	# The enemy stays fixed at center; Phase 2 only changes shooting into a
-	# 3-bullet spread (handled in _shoot).
+	# Enrage: يتحول لون السلّايم إلى الأحمر ويعزف "psd idle".
+	animated_sprite.play("psd idle")

@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_estat")
 bullet_scene = ExtResource("2_ebscene")
-speed = 220.0
+speed = 400.0
 damage = 1.0
 lifetime = 6.0
 instantiated_bullets_count = 1
